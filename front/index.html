@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome | Drea’s Place</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="center">
+    <img id="logo" src="logo.png" alt="Drea’s Place logo" />
+  </header>
+
+  <section id="announcements">
+    <h2>No announcements currently. Check back for updates and goodies!</h2>
+  </section>
+
+  <div class="center mt-2">
+    <button id="enter-button" aria-label="Enter the site">Enter</button>
+  </div>
+
+  <div id="galley" aria-label="Gallery of delicious baked goods images"></div>
+
+  <script>
+    document.getElementById("enter-button").addEventListener("click", function () {
+      window.location.href = "mainscroll.html";
+    });
+  </script>
+</body>
+</html>

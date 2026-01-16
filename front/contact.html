@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Drea’s Place</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav id="navbar">
+    <img id="logoNav" src="media/logo.png" alt="Drea’s Place logo" />
+    <a href="index.html">Home</a>
+    <a href="mainscroll.html">Menu</a>
+    <a href="byo.html">Build-Your-Own</a>
+    <a href="owner.html">Meet the Owner</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <main style="width: min(900px, 92%); margin: 1.5rem auto;">
+    <header class="mb-2">
+      <h1>We’d love to hear from you!</h1>
+    </header>
+
+    <figure class="mb-2">
+      <img src="media/drea" alt="Drea decorating a carrot cake with floral designs." />
+    </figure>
+
+    <section class="mb-3">
+      <h3>Instagram</h3>
+      <p>
+        <a href="https://www.instagram.com/official.dreas_place/" target="_blank" rel="noopener">@official.dreas_place</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>Send a message</h2>
+      <form class="mt-1" action="#" method="post" aria-label="Contact form">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" placeholder="Your name" required />
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" required />
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" placeholder="How can we help?" required></textarea>
+
+        <div class="mt-2">
+          <button type="submit">Send</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
