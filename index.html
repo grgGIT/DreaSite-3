@@ -1,31 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome | Drea’s Place</title>
-  <link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Welcome | Drea's Place</title>
+<link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brown: #4a2c1a;
+    --caramel: #c4793a;
+    --caramel-light: #e8a060;
+    --cream: #fdf6ec;
+    --rose: #d9707a;
+    --text-light: rgba(255,255,255,0.92);
+    --text-dim: rgba(255,255,255,0.6);
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'DM Sans', sans-serif;
+    background: #1a0e08;
+  }
+
+  /* ── SLIDESHOW ── */
+  .slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.4s ease;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.06);
+    transition: opacity 1.4s ease, transform 8s ease;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .slide.exit {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+
+  /* Placeholder slides using CSS gradients — swap src= for real images */
+  .slide-1 { background-image: url('front/media/specials/brownies.jpg'); }
+  .slide-2 { background-image: url('front/media/specials/brownies.jpg'); }
+  .slide-3 { background-image: url('front/media/specials/brownies.jpg'); }
+  .slide-4 { background-image: url('front/media/specials/brownies.jpg'); }
+  .slide-5 { background-image: url('front/media/specials/brownies.jpg'); }
+
+  /* Dark gradient overlay — heavier at bottom and top for legibility */
+  .slide-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(to bottom,
+        rgba(20,8,2,0.55) 0%,
+        rgba(20,8,2,0.1) 35%,
+        rgba(20,8,2,0.15) 55%,
+        rgba(20,8,2,0.75) 100%
+      );
+  }
+
+  /* Grain texture overlay for depth */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    opacity: 0.045;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 2rem 2.5rem;
+    pointer-events: none;
+  }
+
+  /* TOP: Logo */
+  .brand-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    animation: riseIn 1.2s cubic-bezier(.22,1,.36,1) 0.3s both;
+  }
+  #logo {
+    height: clamp(80px, 14vw, 140px);
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.5));
+  }
+  .tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+
+  /* MIDDLE: Slide caption */
+  .caption-wrap {
+    text-align: center;
+    animation: riseIn 1.4s cubic-bezier(.22,1,.36,1) 0.5s both;
+  }
+  .caption-label {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--caramel-light);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .caption-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    color: #fff;
+    line-height: 1.15;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.4);
+    transition: opacity 0.6s ease;
+  }
+  .caption-desc {
+    margin-top: 0.5rem;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    color: var(--text-dim);
+    font-weight: 300;
+    transition: opacity 0.6s ease;
+  }
+
+  /* BOTTOM: Announcements + CTA */
+  .bottom-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+    width: 100%;
+    max-width: 560px;
+    animation: riseIn 1.6s cubic-bezier(.22,1,.36,1) 0.7s both;
+  }
+
+  .announcement {
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 100px;
+    padding: 0.55rem 1.4rem;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+    text-align: center;
+    pointer-events: auto;
+  }
+  .announcement strong { color: var(--caramel-light); font-weight: 500; }
+
+  .enter-btn {
+    pointer-events: auto;
+    cursor: pointer;
+    background: var(--caramel);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 1rem 3.2rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 4px 28px rgba(196,121,58,0.45);
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .enter-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  }
+  .enter-btn:hover {
+    background: var(--caramel-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 36px rgba(196,121,58,0.55);
+  }
+  .enter-btn:active { transform: translateY(0); }
+
+  /* SLIDE DOTS */
+  .dots {
+    display: flex;
+    gap: 7px;
+    pointer-events: auto;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .dot.active {
+    background: var(--caramel-light);
+    transform: scale(1.4);
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 2px;
+    background: var(--caramel);
+    z-index: 20;
+    width: 0%;
+    transition: width linear;
+    opacity: 0.7;
+  }
+
+  /* Page-enter transition */
+  body.leaving .stage,
+  body.leaving .slide-overlay,
+  body.leaving .grain {
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  body.leaving .slideshow {
+    transform: scale(1.06);
+    transition: transform 0.9s ease, opacity 0.7s ease;
+    opacity: 0;
+  }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
+    .stage { padding: 2rem 1.25rem 2rem; }
+    .enter-btn { padding: 0.9rem 2.4rem; }
+  }
+</style>
 </head>
 <body>
-  <header class="center">
-    <img id="logo" src="front/media/logo.png" alt="Drea’s Place logo" />
-  </header>
 
-  <section id="announcements">
-    <h2>No announcements currently. Check back for updates and goodies!</h2>
-  </section>
+<!-- SLIDESHOW -->
+<div class="slideshow" id="slideshow">
+  <!--
+    Replace each background-image URL with your own photos.
+    Recommended: use 5–8 high-quality shots of your baked goods and bakery.
+    Ideal size: 1920×1080px or larger.
+  -->
+  <div class="slide slide-1 active" data-title="Baked with Love" data-desc="Fresh from Drea's kitchen to your door."></div>
+  <div class="slide slide-2" data-title="Weekly Specials" data-desc="New flavors every week — don't miss out."></div>
+  <div class="slide slide-3" data-title="Build Your Own Box" data-desc="Choose your base, filling, frosting & toppings."></div>
+  <div class="slide slide-4" data-title="Cupcakes & Cookies" data-desc="Made from scratch, every single time."></div>
+  <div class="slide slide-5" data-title="Brownies That Hit Different" data-desc="Fudgy, gooey, and completely irresistible."></div>
+</div>
 
-  <div class="center mt-2">
-    <button id="enter-button" aria-label="Enter the site">Enter</button>
+<div class="slide-overlay"></div>
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- MAIN STAGE OVERLAY -->
+<div class="stage">
+
+  <!-- TOP -->
+  <div class="brand-top">
+    <img id="logo" src="front/media/logo.png" alt="Drea's Place logo" />
+    <p class="tagline">Homemade with heart — every single time.</p>
   </div>
 
-  <div id="galley" aria-label="Gallery of delicious baked goods images"></div>
+  <!-- MIDDLE CAPTION -->
+  <div class="caption-wrap">
+    <span class="caption-label">✦ Drea's Place</span>
+    <div class="caption-title" id="captionTitle">Baked with Love</div>
+    <div class="caption-desc" id="captionDesc">Fresh from Drea's kitchen to your door.</div>
+  </div>
 
-  <script>
-    document.getElementById("enter-button").addEventListener("click", function () {
-      window.location.href = "mainscroll.html";
+  <!-- BOTTOM -->
+  <div class="bottom-wrap">
+    <div class="announcement" id="announcementBar">
+      📣 <strong>No announcements right now.</strong> Check back soon for updates &amp; goodies!
+    </div>
+    <button class="enter-btn" id="enter-button" aria-label="Enter the site">
+      Explore the Menu
+    </button>
+    <div class="dots" id="dots"></div>
+  </div>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsWrap = document.getElementById('dots');
+  const captionTitle = document.getElementById('captionTitle');
+  const captionDesc  = document.getElementById('captionDesc');
+  const progressBar  = document.getElementById('progressBar');
+  const INTERVAL = 5000; // ms per slide
+
+  let current = 0;
+  let timer, progressTimer;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function updateDots(idx) {
+    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  function updateCaption(idx) {
+    const slide = slides[idx];
+    captionTitle.style.opacity = '0';
+    captionDesc.style.opacity  = '0';
+    setTimeout(() => {
+      captionTitle.textContent = slide.dataset.title || '';
+      captionDesc.textContent  = slide.dataset.desc  || '';
+      captionTitle.style.opacity = '1';
+      captionDesc.style.opacity  = '1';
+    }, 350);
+  }
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    const prev = current;
+    setTimeout(() => slides[prev].classList.remove('exit'), 1600);
+
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    updateDots(current);
+    updateCaption(current);
+    resetProgress();
+  }
+
+  function next() { goTo(current + 1); }
+
+  function resetProgress() {
+    clearInterval(progressTimer);
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        progressBar.style.transition = `width ${INTERVAL}ms linear`;
+        progressBar.style.width = '100%';
+      });
     });
-  </script>
+  }
+
+  function startAuto() {
+    clearInterval(timer);
+    timer = setInterval(next, INTERVAL);
+    resetProgress();
+  }
+
+  // Pause on hover
+  const stage = document.querySelector('.stage');
+  stage.addEventListener('mouseenter', () => { clearInterval(timer); clearInterval(progressTimer); });
+  stage.addEventListener('mouseleave', () => startAuto());
+
+  // Enter button
+  document.getElementById('enter-button').addEventListener('click', () => {
+    document.body.classList.add('leaving');
+    setTimeout(() => { window.location.href = 'mainscroll.html'; }, 700);
+  });
+
+  // Init
+  startAuto();
+</script>
 </body>
 </html>

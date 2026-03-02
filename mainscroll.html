@@ -1,58 +1,618 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu | Drea’s Place</title>
-    <link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Menu | Drea's Place</title>
+<link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    #special1{
-      border-radius: 0;
-      left: 300px;
-    }
-    #special2{
-      clip-path: ellipse(45% 55% at 50% 60%);
-    }
-    #special3{
-      clip-path: polygon(
-          50% 0%, 61% 8%, 75% 5%, 85% 15%, 95% 25%, 
-          92% 40%, 100% 50%, 92% 60%, 95% 75%, 85% 85%, 
-          75% 95%, 61% 92%, 50% 100%, 39% 92%, 25% 95%, 
-          15% 85%, 5% 75%, 8% 60%, 0% 50%, 8% 40%, 
-          5% 25%, 15% 15%, 25% 5%, 39% 8%
-        );
-    }
-  </style>
+  :root {
+    --cream: #fdf6ec;
+    --brown: #4a2c1a;
+    --caramel: #c4793a;
+    --caramel-light: #e8a060;
+    --rose: #d9707a;
+    --rose-pale: #f5e4e6;
+    --text: #2e1a0e;
+    --muted: #8a6a55;
+    --border: #e8d5c0;
+    --card-bg: #fffcf7;
+    --shadow: 0 2px 12px rgba(74,44,26,0.08);
+    --shadow-hover: 0 8px 32px rgba(74,44,26,0.16);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav#navbar {
+    background: var(--brown);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  nav#navbar img#logoNav { height: 44px; }
+  nav#navbar a {
+    color: #e8cdb0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  nav#navbar a:hover, nav#navbar a.active { color: var(--caramel-light); }
+
+  /* STICKY SECTION NAV */
+  .section-nav {
+    background: var(--card-bg);
+    border-bottom: 1.5px solid var(--border);
+    position: sticky;
+    top: 62px;
+    z-index: 90;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .section-nav::-webkit-scrollbar { display: none; }
+  .section-nav a {
+    padding: 0.75rem 1.4rem;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    border-bottom: 2.5px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .section-nav a:hover { color: var(--caramel); }
+  .section-nav a.active { color: var(--brown); border-bottom-color: var(--caramel); }
+
+  /* PAGE */
+  .page-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 6rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .eyebrow {
+    font-size: 0.73rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--caramel);
+    font-weight: 500;
+    margin-bottom: 0.55rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    color: var(--brown);
+    line-height: 1.1;
+  }
+  .page-header .sub {
+    margin-top: 0.55rem;
+    color: var(--muted);
+    font-weight: 300;
+    font-size: 1rem;
+  }
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.4rem auto 0;
+    max-width: 300px;
+  }
+  .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
+  .divider-icon { color: var(--caramel); font-size: 1rem; }
+
+  /* MENU SECTION */
+  .menu-section {
+    margin-bottom: 4.5rem;
+    scroll-margin-top: 116px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .menu-section:nth-child(1) { animation-delay: 0.05s; }
+  .menu-section:nth-child(2) { animation-delay: 0.12s; }
+  .menu-section:nth-child(3) { animation-delay: 0.19s; }
+  .menu-section:nth-child(4) { animation-delay: 0.26s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 1.75rem;
+  }
+  .section-heading h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--brown);
+    white-space: nowrap;
+  }
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: var(--border);
+  }
+  .section-emoji { font-size: 1.3rem; }
+
+  /* SPECIALS GRID */
+  .specials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+  }
+  @media (max-width: 800px) { .specials-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px)  { .specials-grid { grid-template-columns: 1fr; } }
+
+  .special-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  .special-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); }
+
+  .special-card.featured {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    max-height: 300px;
+  }
+  .special-card.featured .card-img-wrap { width: 44%; flex-shrink: 0; aspect-ratio: unset; }
+  .special-card.featured .card-body { justify-content: center; padding: 2rem 2.2rem; }
+  .special-card.featured .card-title { font-size: 1.65rem; }
+
+  @media (max-width: 800px) {
+    .special-card.featured { flex-direction: column; grid-column: 1/-1; max-height: none; }
+    .special-card.featured .card-img-wrap { width: 100%; aspect-ratio: 16/9; }
+  }
+
+  .card-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--border);
+  }
+  .card-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.4s ease;
+  }
+  .special-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+  .badge {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: var(--rose);
+    color: #fff;
+    font-size: 0.66rem; font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.65rem;
+    border-radius: 100px;
+  }
+  .badge.featured-badge { background: var(--caramel); }
+
+  .card-body {
+    padding: 1rem 1.15rem 1.3rem;
+    flex: 1; display: flex; flex-direction: column; gap: 0.4rem;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--brown);
+    line-height: 1.2;
+  }
+  .card-desc {
+    font-size: 0.86rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.7rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border);
+  }
+  .card-price { font-size: 1rem; font-weight: 600; color: var(--caramel); }
+  .card-tag {
+    font-size: 0.71rem; color: var(--muted);
+    background: var(--rose-pale);
+    border-radius: 100px;
+    padding: 0.18rem 0.6rem;
+  }
+
+  /* STANDARD MENU GRID */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1rem;
+  }
+
+  .menu-item {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.1rem 1.05rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .menu-item:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+
+  .item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--brown);
+  }
+  .item-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.6rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .item-price { font-size: 0.9rem; font-weight: 600; color: var(--caramel); }
+  .item-tag {
+    font-size: 0.67rem;
+    color: var(--muted);
+    background: #f0e8df;
+    border-radius: 100px;
+    padding: 0.15rem 0.55rem;
+  }
+
+  /* CTA */
+  .cta-bar {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    margin-top: 1rem;
+  }
+  .cta-bar p { color: var(--muted); font-size: 0.95rem; margin-bottom: 1rem; }
+  .btn-primary {
+    display: inline-block;
+    background: var(--brown);
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 0.93rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--caramel); }
+</style>
 </head>
 <body>
-  <nav id="navbar">
-    <img id="logoNav" src="front/media/logo.png" alt="Drea’s Place logo" />
-    <!-- <a href="index.html">Home</a> -->
-    <a href="mainscroll.html">Menu</a>
-    <a href="byo.html">Build-Your-Own</a>
-    <a href="owner.html">Meet the Owner</a>
-    <a href="contact.html">Contact</a>
-  </nav>
 
-  <main id="specials">
-    <h1>Weekly Specials</h1>
-    <div class="specials" id="special1">
-      <img src="front/media/specials/brownies.jpg" alt="Special 1 item preview" />
-      <h3 class="Title">Title</h3>
-      <p class="flavorText">Description of the special goes here.</p>
+<nav id="navbar">
+  <img id="logoNav" src="front/media/logo.png" alt="Drea's Place logo" />
+  <a href="mainscroll.html" class="active">Menu</a>
+  <a href="byo.html">Build-Your-Own</a>
+  <a href="owner.html">Meet the Owner</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<nav class="section-nav" id="sectionNav">
+  <a href="#specials">⭐ Specials</a>
+  <a href="#cupcakes">🧁 Cupcakes</a>
+  <a href="#cookies">🍪 Cookies</a>
+  <a href="#brownies">🍫 Brownies</a>
+</nav>
+
+<div class="page-wrap">
+
+  <header class="page-header">
+    <p class="eyebrow">Baked Fresh · Made with Love</p>
+    <h1>Our Menu</h1>
+    <p class="sub">Everything is homemade — because shortcuts don't taste this good.</p>
+    <div class="divider"><span class="divider-icon">✦</span></div>
+  </header>
+
+  <!-- WEEKLY SPECIALS -->
+  <section class="menu-section" id="specials">
+    <div class="section-heading">
+      <span class="section-emoji">⭐</span>
+      <h2>Weekly Specials</h2>
     </div>
-    <div class="specials" id="special2">
-      <img src="front/media/specials/brownies.jpg" alt="Special 2 item preview" />
-      <h3 class="Title">Title</h3>
-      <p class="flavorText">Description of the special goes here.</p>
+    <div class="specials-grid">
+
+      <div class="special-card featured">
+        <div class="card-img-wrap">
+          <img src="front/media/specials/brownies.jpg" alt="Featured Special" />
+          <span class="badge featured-badge">⭐ Featured</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Special Item Title</h3>
+          <p class="card-desc">Describe what makes this week's feature irresistible — the flavors, the inspiration, any seasonal ingredients. Make it feel special because it is.</p>
+          <div class="card-footer">
+            <span class="card-price">$0.00</span>
+            <span class="card-tag">Limited Qty</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="special-card">
+        <div class="card-img-wrap">
+          <img src="front/media/specials/brownies.jpg" alt="Special 2" />
+          <span class="badge">This Week</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Special Item Title</h3>
+          <p class="card-desc">Short, enticing description of this week's special.</p>
+          <div class="card-footer">
+            <span class="card-price">$0.00</span>
+            <span class="card-tag">Available Now</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="special-card">
+        <div class="card-img-wrap">
+          <img src="front/media/specials/brownies.jpg" alt="Special 3" />
+          <span class="badge">This Week</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Special Item Title</h3>
+          <p class="card-desc">Short, enticing description of this week's special.</p>
+          <div class="card-footer">
+            <span class="card-price">$0.00</span>
+            <span class="card-tag">Available Now</span>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <div class="specials" id="special3">
-      <img src="front/media/specials/brownies.jpg" alt="Special 3 item preview" />
-      <h3 class="Title">Title</h3>
-      <p class="flavorText">Description of the special goes here.</p>
+  </section>
+
+  <!-- CUPCAKES -->
+  <section class="menu-section" id="cupcakes">
+    <div class="section-heading">
+      <span class="section-emoji">🧁</span>
+      <h2>Cupcakes</h2>
     </div>
-  </main>
+    <div class="menu-grid">
+
+      <div class="menu-item">
+        <span class="item-name">Classic Vanilla</span>
+        <span class="item-desc">Light vanilla cake with silky vanilla buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Fan Favorite</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Classic Chocolate</span>
+        <span class="item-desc">Rich chocolate cake topped with chocolate buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Fan Favorite</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Red Velvet</span>
+        <span class="item-desc">Velvety red cake finished with cream cheese buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Classic</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Lemon</span>
+        <span class="item-desc">Bright lemon cake with lemon buttercream and a citrus finish.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Seasonal</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Strawberry</span>
+        <span class="item-desc">Fresh strawberry cake with whipped buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Cookies n Cream</span>
+        <span class="item-desc">Oreo-studded cake with cookies n cream buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Popular</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Banana</span>
+        <span class="item-desc">Moist banana cake with banana buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Cinnamon</span>
+        <span class="item-desc">Warm cinnamon cake topped with cinnamon buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Honey</span>
+        <span class="item-desc">Subtly sweet honey cake with whipped buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">GF Chocolate</span>
+        <span class="item-desc">Gluten-free chocolate cake — same great flavor, no compromise.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Gluten-Free</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">GF Vanilla</span>
+        <span class="item-desc">Gluten-free vanilla cake with classic vanilla buttercream.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Gluten-Free</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Sugar-Free Vanilla</span>
+        <span class="item-desc">All the flavor, none of the sugar.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Sugar-Free</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Sugar-Free Chocolate</span>
+        <span class="item-desc">Rich chocolate flavor in a sugar-free recipe.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Sugar-Free</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COOKIES -->
+  <section class="menu-section" id="cookies">
+    <div class="section-heading">
+      <span class="section-emoji">🍪</span>
+      <h2>Cookies</h2>
+    </div>
+    <div class="menu-grid">
+
+      <div class="menu-item">
+        <span class="item-name">Classic Chocolate Chip</span>
+        <span class="item-desc">Buttery, chewy, loaded with chocolate chips. The one that started it all.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Fan Favorite</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Double Chocolate</span>
+        <span class="item-desc">Fudgy chocolate cookie with extra chocolate chips throughout.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Popular</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Sugar Cookie</span>
+        <span class="item-desc">Soft, classic sugar cookie — plain or decorated.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Snickerdoodle</span>
+        <span class="item-desc">Soft cinnamon-sugar cookie with a slightly crisp edge.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Oreo Stuffed</span>
+        <span class="item-desc">Chocolate chip cookie dough wrapped around a whole Oreo.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Popular</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Peanut Butter</span>
+        <span class="item-desc">Dense, rich peanut butter cookie with a fork-pressed top.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BROWNIES -->
+  <section class="menu-section" id="brownies">
+    <div class="section-heading">
+      <span class="section-emoji">🍫</span>
+      <h2>Brownies</h2>
+    </div>
+    <div class="menu-grid">
+
+      <div class="menu-item">
+        <span class="item-name">Classic Fudge Brownie</span>
+        <span class="item-desc">Dense, gooey, crinkle-topped chocolate brownie. A timeless staple.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Fan Favorite</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Cream Cheese Swirl</span>
+        <span class="item-desc">Fudge brownie base with a rich cream cheese ribbon baked in.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Popular</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Caramel Brownie</span>
+        <span class="item-desc">Chocolate brownie drizzled with gooey salted caramel.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Oreo Brownie</span>
+        <span class="item-desc">Fudge brownie loaded with Oreo pieces on top and throughout.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span><span class="item-tag">Popular</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Peanut Butter Swirl</span>
+        <span class="item-desc">Chocolate brownie with swirls of peanut butter baked right in.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+      <div class="menu-item">
+        <span class="item-name">Blondie</span>
+        <span class="item-desc">Brown butter blondie with chocolate chips and a chewy center.</span>
+        <div class="item-footer"><span class="item-price">$0.00</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="cta-bar">
+    <p>Want something totally your own? Mix and match bases, fillings, frostings, and toppings.</p>
+    <a href="byo.html" class="btn-primary">Build Your Own Box →</a>
+  </div>
+
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.menu-section');
+  const navLinks = document.querySelectorAll('.section-nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${id}`));
+      }
+    });
+  }, { rootMargin: '-25% 0px -65% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
 </body>
 </html>
