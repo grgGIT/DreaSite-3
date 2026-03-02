@@ -1,115 +1,603 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Build Your Own | Drea’s Place</title>
-    <link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Build Your Own | Drea's Place</title>
+<link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <link rel="stylesheet" href="style.css" />
+  :root {
+    --cream: #fdf6ec;
+    --warm-white: #fffaf4;
+    --brown: #4a2c1a;
+    --caramel: #c4793a;
+    --caramel-light: #e8a060;
+    --rose: #d9707a;
+    --rose-pale: #f5e4e6;
+    --text: #2e1a0e;
+    --muted: #8a6a55;
+    --border: #e8d5c0;
+    --card-bg: #fffcf7;
+    --selected-bg: #fdf0e4;
+    --selected-border: #c4793a;
+    --shadow: 0 2px 12px rgba(74,44,26,0.08);
+    --shadow-hover: 0 6px 24px rgba(74,44,26,0.14);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav#navbar {
+    background: var(--brown);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  nav#navbar img#logoNav { height: 44px; }
+  nav#navbar a {
+    color: #e8cdb0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  nav#navbar a:hover { color: var(--caramel-light); }
+
+  /* LAYOUT */
+  .page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* HEADER */
+  .page-header {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 0.5rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--brown);
+    line-height: 1.15;
+  }
+  .page-header p {
+    color: var(--muted);
+    margin-top: 0.4rem;
+    font-size: 1rem;
+    font-weight: 300;
+  }
+  .steps-hint {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .step-badge {
+    background: var(--rose-pale);
+    color: var(--rose);
+    border-radius: 100px;
+    padding: 0.25rem 0.9rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .step-badge:hover, .step-badge.active {
+    background: var(--rose);
+    color: #fff;
+  }
+
+  /* BUILDER */
+  .builder { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .step-section {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.2s;
+  }
+  .step-section:focus-within { box-shadow: var(--shadow-hover); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, var(--brown) 0%, #6b3d22 100%);
+    color: #fff;
+  }
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .step-title { font-weight: 500; font-size: 1.05rem; }
+  .step-selected-label {
+    margin-left: auto;
+    background: rgba(255,255,255,0.15);
+    border-radius: 100px;
+    padding: 0.2rem 0.75rem;
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chips-wrap {
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 0.4rem 1rem;
+    font-size: 0.86rem;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
+    color: var(--text);
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .chip:hover {
+    border-color: var(--caramel);
+    background: var(--selected-bg);
+    color: var(--brown);
+  }
+  .chip.selected {
+    background: var(--caramel);
+    border-color: var(--caramel);
+    color: #fff;
+    font-weight: 500;
+  }
+  .chip.selected.multi { background: var(--rose); border-color: var(--rose); }
+  .chips-note {
+    padding: 0 1.1rem 0.85rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ORDER SUMMARY */
+  .summary-wrap {
+    position: sticky;
+    top: 80px;
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .summary-header {
+    background: linear-gradient(135deg, var(--caramel) 0%, #a85e28 100%);
+    color: #fff;
+    padding: 1rem 1.25rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+  }
+  .summary-body { padding: 1.1rem 1.25rem; }
+
+  .summary-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row:last-of-type { border-bottom: none; }
+  .summary-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .summary-value {
+    font-size: 0.93rem;
+    color: var(--brown);
+    font-weight: 500;
+    min-height: 1.2em;
+  }
+  .summary-value.empty { color: var(--border); font-style: italic; font-weight: 300; }
+
+  /* PRICING */
+  .pricing-section {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-top: 0;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .price-card {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .price-card + .price-card { border-left: 1px solid var(--border); }
+  .price-card:nth-child(3), .price-card:nth-child(4) { border-top: 1px solid var(--border); }
+  .price-card:hover { background: var(--selected-bg); }
+  .price-card.selected-pack {
+    background: var(--rose-pale);
+    outline: 2px solid var(--rose);
+    outline-offset: -2px;
+    z-index: 1;
+  }
+  .pack-size {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--brown);
+    line-height: 1;
+  }
+  .pack-label { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+  .pack-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--caramel);
+    margin-top: 0.5rem;
+  }
+  .pack-per {
+    font-size: 0.73rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+  }
+  .best-value {
+    position: absolute;
+    top: 6px; right: 6px;
+    background: var(--rose);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+  }
+
+  .order-cta {
+    margin-top: 1.1rem;
+    padding: 0.85rem;
+    background: var(--brown);
+    color: #fff;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.2s;
+  }
+  .order-cta:hover { background: var(--caramel); }
+
+  /* MOBILE */
+  @media (max-width: 780px) {
+    .page-wrap {
+      grid-template-columns: 1fr;
+    }
+    .summary-wrap {
+      position: static;
+      order: -1;
+      grid-row: 2;
+    }
+    .pricing-section { order: 3; }
+  }
+</style>
 </head>
 <body>
-  <nav id="navbar">
-    <img id="logoNav" src="front/media/logo.png" alt="Drea’s Place logo" />
-    <!-- <a href="index.html">Home</a> -->
-    <a href="mainscroll.html">Menu</a>
-    <a href="byo.html">Build-Your-Own</a>
-    <a href="owner.html">Meet the Owner</a>
-    <a href="contact.html">Contact</a>
-  </nav>
 
-  <main style="width: min(1100px, 92%); margin: 1.5rem auto;">
-    <header class="mb-2">
-      <h1>Build Your Own Box</h1>
-      <p>Create your perfect assortment by choosing a base, filling, frosting, and toppings.</p>
-    </header>
+<nav id="navbar">
+  <img id="logoNav" src="front/media/logo.png" alt="Drea's Place logo" />
+  <a href="mainscroll.html">Menu</a>
+  <a href="byo.html">Build-Your-Own</a>
+  <a href="owner.html">Meet the Owner</a>
+  <a href="contact.html">Contact</a>
+</nav>
 
-    <section class="mb-3">
-      <h2>Step 1: Choose Your Base</h2>
-      <ul>
-        <li>Vanilla</li>
-        <li>Chocolate</li>
-        <li>Cinnamon</li>
-        <li>Red Velvet</li>
-        <li>Gluten-Free Chocolate</li>
-        <li>Gluten-Free Vanilla</li>
-        <li>Sugar-Free Vanilla</li>
-        <li>Sugar-Free Chocolate</li>
-        <li>Lemon</li>
-        <li>Cookies n Cream</li>
-        <li>Honey</li>
-        <li>Strawberry</li>
-        <li>Banana</li>
-      </ul>
-    </section>
+<div class="page-wrap">
 
-    <section class="mb-3">
-      <h2>Step 2: Pick a Filling</h2>
-      <ul>
-        <li>Strawberry Ganache</li>
-        <li>Vanilla Ganache</li>
-        <li>Chocolate Ganache</li>
-        <li>Apple Filling</li>
-        <li>Cherry Filling</li>
-        <li>Strawberry Filling</li>
-        <li>Caramel Ganache</li>
-        <li>Lemon</li>
-        <li>Marshmallow Fluff</li>
-        <li>Cookies n Cream</li>
-        <li>Biscoff</li>
-      </ul>
-    </section>
+  <!-- HEADER -->
+  <header class="page-header">
+    <h1>Build Your Own Box 🧁</h1>
+    <p>Pick your base, filling, frosting, and toppings — we'll handle the magic.</p>
+    <div class="steps-hint">
+      <span class="step-badge" onclick="scrollToStep(1)">1 · Base</span>
+      <span class="step-badge" onclick="scrollToStep(2)">2 · Filling</span>
+      <span class="step-badge" onclick="scrollToStep(3)">3 · Frosting</span>
+      <span class="step-badge" onclick="scrollToStep(4)">4 · Toppings</span>
+    </div>
+  </header>
 
-    <section class="mb-3">
-      <h2>Step 3: Select a Frosting</h2>
-      <ul>
-        <li>Chocolate Buttercream</li>
-        <li>Vanilla Buttercream</li>
-        <li>Cream Cheese Buttercream</li>
-        <li>Marshmallow Buttercream</li>
-        <li>Whipped Buttercream</li>
-        <li>Caramel Buttercream</li>
-        <li>Cinnamon Buttercream</li>
-        <li>Lemon Buttercream</li>
-        <li>Cookies n Cream Buttercream</li>
-        <li>Banana Buttercream</li>
-      </ul>
-    </section>
+  <!-- BUILDER STEPS -->
+  <div class="builder">
 
-    <section class="mb-3">
-      <h2>Step 4: Add Your Toppings</h2>
-      <ul>
-        <li>Churro Chunks</li>
-        <li>Cheesecake Chunks</li>
-        <li>Chocolate Sprinkles</li>
-        <li>Rainbow Sprinkles</li>
-        <li>Strawberry Halves</li>
-        <li>Marshmallows</li>
-        <li>Snickers</li>
-        <li>Reese’s</li>
-        <li>Twix</li>
-        <li>Kit-Kats</li>
-        <li>White Chocolate Shavings</li>
-        <li>Oreo Halves</li>
-        <li>Oreo Crumble</li>
-        <li>Lemon Candy</li>
-        <li>Cosmic Brownies</li>
-        <li>Chocolate Drizzle</li>
-        <li>Caramel Drizzle</li>
-        <li>White Chocolate Drizzle</li>
-      </ul>
-      <p class="mt-1"><em>First topping is free; each additional topping is $1.95.</em></p>
-    </section>
+    <!-- STEP 1 -->
+    <div class="step-section" id="step1">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <span class="step-title">Choose Your Base</span>
+        <span class="step-selected-label" id="label-base">None selected</span>
+      </div>
+      <div class="chips-wrap" id="chips-base">
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Vanilla</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Chocolate</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Cinnamon</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Red Velvet</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">GF Chocolate</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">GF Vanilla</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Sugar-Free Vanilla</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Sugar-Free Chocolate</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Lemon</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Cookies n Cream</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Honey</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Strawberry</div>
+        <div class="chip" data-step="base" onclick="selectSingle(this,'base')">Banana</div>
+      </div>
+    </div>
 
-    <section>
-      <h2>Pricing</h2>
-      <ul>
-        <li>6-Pack – $18</li>
-        <li>12-Pack – $36</li>
-        <li>24-Pack – $72</li>
-        <li>48-Pack – $97</li>
-      </ul>
-    </section>
-  </main>
+    <!-- STEP 2 -->
+    <div class="step-section" id="step2">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <span class="step-title">Pick a Filling</span>
+        <span class="step-selected-label" id="label-filling">None selected</span>
+      </div>
+      <div class="chips-wrap" id="chips-filling">
+        <div class="chip" onclick="selectSingle(this,'filling')">Strawberry Ganache</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Vanilla Ganache</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Chocolate Ganache</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Apple Filling</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Cherry Filling</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Strawberry Filling</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Caramel Ganache</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Lemon</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Marshmallow Fluff</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Cookies n Cream</div>
+        <div class="chip" onclick="selectSingle(this,'filling')">Biscoff</div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-section" id="step3">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <span class="step-title">Select a Frosting</span>
+        <span class="step-selected-label" id="label-frosting">None selected</span>
+      </div>
+      <div class="chips-wrap" id="chips-frosting">
+        <div class="chip" onclick="selectSingle(this,'frosting')">Chocolate Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Vanilla Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Cream Cheese Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Marshmallow Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Whipped Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Caramel Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Cinnamon Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Lemon Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Cookies n Cream Buttercream</div>
+        <div class="chip" onclick="selectSingle(this,'frosting')">Banana Buttercream</div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-section" id="step4">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <span class="step-title">Add Toppings</span>
+        <span class="step-selected-label" id="label-toppings">None selected</span>
+      </div>
+      <div class="chips-wrap" id="chips-toppings">
+        <div class="chip" onclick="toggleTopping(this)">Churro Chunks</div>
+        <div class="chip" onclick="toggleTopping(this)">Cheesecake Chunks</div>
+        <div class="chip" onclick="toggleTopping(this)">Chocolate Sprinkles</div>
+        <div class="chip" onclick="toggleTopping(this)">Rainbow Sprinkles</div>
+        <div class="chip" onclick="toggleTopping(this)">Strawberry Halves</div>
+        <div class="chip" onclick="toggleTopping(this)">Marshmallows</div>
+        <div class="chip" onclick="toggleTopping(this)">Snickers</div>
+        <div class="chip" onclick="toggleTopping(this)">Reese's</div>
+        <div class="chip" onclick="toggleTopping(this)">Twix</div>
+        <div class="chip" onclick="toggleTopping(this)">Kit-Kats</div>
+        <div class="chip" onclick="toggleTopping(this)">White Choc Shavings</div>
+        <div class="chip" onclick="toggleTopping(this)">Oreo Halves</div>
+        <div class="chip" onclick="toggleTopping(this)">Oreo Crumble</div>
+        <div class="chip" onclick="toggleTopping(this)">Lemon Candy</div>
+        <div class="chip" onclick="toggleTopping(this)">Cosmic Brownies</div>
+        <div class="chip" onclick="toggleTopping(this)">Chocolate Drizzle</div>
+        <div class="chip" onclick="toggleTopping(this)">Caramel Drizzle</div>
+        <div class="chip" onclick="toggleTopping(this)">White Choc Drizzle</div>
+      </div>
+      <p class="chips-note">First topping is free · each additional topping +$1.95</p>
+    </div>
+
+  </div><!-- /builder -->
+
+  <!-- SIDEBAR -->
+  <aside>
+
+    <!-- ORDER SUMMARY -->
+    <div class="summary-wrap">
+      <div class="summary-header">Your Order</div>
+      <div class="summary-body">
+        <div class="summary-row">
+          <span class="summary-label">Base</span>
+          <span class="summary-value empty" id="sum-base">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Filling</span>
+          <span class="summary-value empty" id="sum-filling">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Frosting</span>
+          <span class="summary-value empty" id="sum-frosting">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Toppings</span>
+          <span class="summary-value empty" id="sum-toppings">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Box Size</span>
+          <span class="summary-value empty" id="sum-pack">—</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Topping Add-Ons</span>
+          <span class="summary-value" id="sum-extra">$0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="pricing-section" style="margin-top:1rem;">
+      <div class="step-header" style="background:linear-gradient(135deg,#6b3d22,#4a2c1a);">
+        <div class="step-num" style="font-size:1rem;">$</div>
+        <span class="step-title">Choose Your Box Size</span>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card" onclick="selectPack(this,'6-Pack','18')">
+          <div class="pack-size">6</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$18</div>
+          <div class="pack-per">$3.00 each</div>
+        </div>
+        <div class="price-card" onclick="selectPack(this,'12-Pack','36')">
+          <div class="pack-size">12</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$36</div>
+          <div class="pack-per">$3.00 each</div>
+        </div>
+        <div class="price-card" onclick="selectPack(this,'24-Pack','72')">
+          <div class="pack-size">24</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$72</div>
+          <div class="pack-per">$3.00 each</div>
+        </div>
+        <div class="price-card" onclick="selectPack(this,'48-Pack','97')">
+          <span class="best-value">Best Value</span>
+          <div class="pack-size">48</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$97</div>
+          <div class="pack-per">$2.02 each</div>
+        </div>
+      </div>
+      <div style="padding:1rem 1.1rem 1.25rem;">
+        <button class="order-cta" onclick="submitOrder()">Place Order via Contact Page →</button>
+      </div>
+    </div>
+
+  </aside>
+
+</div><!-- /page-wrap -->
+
+<script>
+  const state = { base: null, filling: null, frosting: null, toppings: [], pack: null, packPrice: 0 };
+
+  function selectSingle(el, step) {
+    document.querySelectorAll(`#chips-${step} .chip`).forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    state[step] = el.textContent.trim();
+    document.getElementById(`label-${step}`).textContent = state[step];
+    updateSummary();
+    const next = { base:'step2', filling:'step3', frosting:'step4' };
+    if (next[step]) {
+      setTimeout(() => document.getElementById(next[step]).scrollIntoView({ behavior:'smooth', block:'nearest' }), 250);
+    }
+  }
+
+  function toggleTopping(el) {
+    el.classList.toggle('selected');
+    el.classList.toggle('multi', el.classList.contains('selected'));
+    const name = el.textContent.trim();
+    if (el.classList.contains('selected')) {
+      state.toppings.push(name);
+    } else {
+      state.toppings = state.toppings.filter(t => t !== name);
+    }
+    const count = state.toppings.length;
+    document.getElementById('label-toppings').textContent = count ? `${count} selected` : 'None selected';
+    updateSummary();
+  }
+
+  function selectPack(el, name, price) {
+    document.querySelectorAll('.price-card').forEach(c => c.classList.remove('selected-pack'));
+    el.classList.add('selected-pack');
+    state.pack = name;
+    state.packPrice = parseInt(price);
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const set = (id, val) => {
+      const el = document.getElementById(id);
+      if (val) { el.textContent = val; el.classList.remove('empty'); }
+      else { el.textContent = '—'; el.classList.add('empty'); }
+    };
+    set('sum-base', state.base);
+    set('sum-filling', state.filling);
+    set('sum-frosting', state.frosting);
+    set('sum-toppings', state.toppings.length ? state.toppings.join(', ') : null);
+    set('sum-pack', state.pack);
+    const extra = Math.max(0, state.toppings.length - 1) * 1.95;
+    document.getElementById('sum-extra').textContent = `$${extra.toFixed(2)}`;
+  }
+
+  function scrollToStep(n) {
+    document.getElementById(`step${n}`).scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function submitOrder() {
+    const ok = state.base && state.filling && state.frosting && state.pack;
+    if (!ok) {
+      alert('Please complete Steps 1–3 and choose a box size before submitting!');
+      return;
+    }
+    const msg = encodeURIComponent(`Hi! I'd like to place a Build-Your-Own order:\n- Base: ${state.base}\n- Filling: ${state.filling}\n- Frosting: ${state.frosting}\n- Toppings: ${state.toppings.join(', ') || 'None'}\n- Box Size: ${state.pack}`);
+    window.location.href = `contact.html?msg=${msg}`;
+  }
+</script>
 </body>
 </html>
