@@ -355,6 +355,44 @@
     </div>
   </header>
 
+   <!-- PRICING -->
+    <div class="pricing-section" style="margin-top:1rem;">
+      <div class="step-header" style="background:linear-gradient(135deg,#6b3d22,#4a2c1a);">
+        <div class="step-num" style="font-size:1rem;">$</div>
+        <span class="step-title">Choose Your Box Size</span>
+      </div>
+      <div class="pricing-grid">
+        <div class="price-card" onclick="selectPack(this,'6-Pack','18')">
+          <div class="pack-size">6</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$18</div>
+          <div class="pack-per">$3.00 each</div>
+        </div>
+        <div class="price-card" onclick="selectPack(this,'12-Pack','36')">
+          <div class="pack-size">12</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$36</div>
+          <div class="pack-per">$3.00 each</div>
+        </div>
+        <div class="price-card" onclick="selectPack(this,'24-Pack','72')">
+          <div class="pack-size">24</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$72</div>
+          <div class="pack-per">$3.00 each</div>
+        </div>
+        <div class="price-card" onclick="selectPack(this,'48-Pack','97')">
+          <span class="best-value">Best Value</span>
+          <div class="pack-size">48</div>
+          <div class="pack-label">Pack</div>
+          <div class="pack-price">$97</div>
+          <div class="pack-per">$2.02 each</div>
+        </div>
+      </div>
+      <div style="padding:1rem 1.1rem 1.25rem;">
+        <button class="order-cta" onclick="submitOrder()">Place Order via Contact Page →</button>
+      </div>
+    </div>
+
   <!-- BUILDER STEPS -->
   <div class="builder">
 
@@ -491,43 +529,7 @@
       </div>
     </div>
 
-    <!-- PRICING -->
-    <div class="pricing-section" style="margin-top:1rem;">
-      <div class="step-header" style="background:linear-gradient(135deg,#6b3d22,#4a2c1a);">
-        <div class="step-num" style="font-size:1rem;">$</div>
-        <span class="step-title">Choose Your Box Size</span>
-      </div>
-      <div class="pricing-grid">
-        <div class="price-card" onclick="selectPack(this,'6-Pack','18')">
-          <div class="pack-size">6</div>
-          <div class="pack-label">Pack</div>
-          <div class="pack-price">$18</div>
-          <div class="pack-per">$3.00 each</div>
-        </div>
-        <div class="price-card" onclick="selectPack(this,'12-Pack','36')">
-          <div class="pack-size">12</div>
-          <div class="pack-label">Pack</div>
-          <div class="pack-price">$36</div>
-          <div class="pack-per">$3.00 each</div>
-        </div>
-        <div class="price-card" onclick="selectPack(this,'24-Pack','72')">
-          <div class="pack-size">24</div>
-          <div class="pack-label">Pack</div>
-          <div class="pack-price">$72</div>
-          <div class="pack-per">$3.00 each</div>
-        </div>
-        <div class="price-card" onclick="selectPack(this,'48-Pack','97')">
-          <span class="best-value">Best Value</span>
-          <div class="pack-size">48</div>
-          <div class="pack-label">Pack</div>
-          <div class="pack-price">$97</div>
-          <div class="pack-per">$2.02 each</div>
-        </div>
-      </div>
-      <div style="padding:1rem 1.1rem 1.25rem;">
-        <button class="order-cta" onclick="submitOrder()">Place Order via Contact Page →</button>
-      </div>
-    </div>
+   
 
   </aside>
 
