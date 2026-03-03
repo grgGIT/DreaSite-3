@@ -1,6 +1,6 @@
 /* Global design tokens */
 :root {
-  --bg: #ffeda6;
+  --bg: #fdf6ec;
   --text: #402620;
   --text-strong: #280003;
   --accent: #d4a975;
@@ -10,6 +10,18 @@
   --panel-bg: #fff7d4;
   --card-bg: #fffdf3;
   --shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --cream: #fdf6ec;
+    --brown: #4a2c1a;
+    --caramel: #c4793a;
+    --caramel-light: #e8a060;
+    --rose: #d9707a;
+    --rose-pale: #f5e4e6;
+    --text: #2e1a0e;
+    --muted: #8a6a55;
+    --border: #e8d5c0;
+    --card-bg: #fffcf7;
+    --shadow: 0 2px 12px rgba(74,44,26,0.08);
+    --shadow-hover: 0 8px 32px rgba(74,44,26,0.16); 
 }
 
 /* CSS reset / base */
@@ -125,7 +137,6 @@ button,
   color: var(--text);
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: center;
   gap: 0.5rem 1rem;
   padding: 0.6rem 1rem;
