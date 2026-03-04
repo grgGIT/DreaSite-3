@@ -1,85 +1,575 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact | Drea’s Place</title>
-    <link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact | Drea's Place</title>
+<link rel="icon" type="image/x-icon" href="front/media/favicon_io/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <link rel="stylesheet" href="style.css" />
+  :root {
+    --cream: #fdf6ec;
+    --brown: #4a2c1a;
+    --caramel: #c4793a;
+    --caramel-light: #e8a060;
+    --rose: #d9707a;
+    --rose-pale: #f5e4e6;
+    --text: #2e1a0e;
+    --muted: #8a6a55;
+    --border: #e8d5c0;
+    --card-bg: #fffcf7;
+    --shadow: 0 2px 12px rgba(74,44,26,0.08);
+    --shadow-hover: 0 8px 32px rgba(74,44,26,0.14);
+    --success: #5a9e6f;
+    --error: #c0453a;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav#navbar {
+    background: var(--brown);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  nav#navbar img#logoNav { height: 44px; }
+  nav#navbar a {
+    color: #e8cdb0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  nav#navbar a:hover, nav#navbar a.active { color: var(--caramel-light); }
+
+  /* ── PAGE ── */
+  .page-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 6rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .eyebrow {
+    font-size: 0.73rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--caramel);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    color: var(--brown);
+    line-height: 1.15;
+  }
+  .page-header p {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-weight: 300;
+    font-size: 1rem;
+  }
+  .divider {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 1.2rem auto 0; max-width: 280px;
+  }
+  .divider::before, .divider::after { content:''; flex:1; height:1px; background:var(--border); }
+  .divider-icon { color: var(--caramel); font-size: 0.9rem; }
+
+  /* ── TWO-COLUMN LAYOUT ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
+
+  /* ── LEFT: PHOTO + INFO ── */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+
+  /* Bell jar photo frame */
+  .jar-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  .jar-wrap svg.clip-def { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .jar-photo {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 0;
+  }
+  /* glass glare */
+  .jar-glare {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 55% 28% at 36% 18%,
+      rgba(255,255,255,0.28) 0%,
+      transparent 68%
+    );
+  }
+  /* base shadow */
+  .jar-base {
+    width: 70%;
+    height: 14px;
+    background: rgba(74,44,26,0.13);
+    border-radius: 50%;
+    filter: blur(8px);
+    margin: -4px auto 0;
+  }
+
+  /* Info card */
+  .info-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 1.4rem 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .info-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--brown);
+    margin-bottom: 0.1rem;
+  }
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .info-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--rose-pale);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .info-text { font-size: 0.88rem; color: var(--muted); line-height: 1.4; }
+  .info-text a {
+    color: var(--caramel);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .info-text a:hover { color: var(--brown); }
+  .info-divider { height: 1px; background: var(--border); }
+
+  /* ── RIGHT: FORM ── */
+  .form-card {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+  .form-header {
+    background: linear-gradient(135deg, var(--brown) 0%, #6b3d22 100%);
+    padding: 1.25rem 1.5rem;
+    color: #fff;
+  }
+  .form-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+  .form-header p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.25rem;
+    font-weight: 300;
+  }
+  .form-body { padding: 1.75rem 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+
+  .field { display: flex; flex-direction: column; gap: 0.4rem; }
+  .field label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--brown);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .field input,
+  .field textarea,
+  .field select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 300;
+    color: var(--text);
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    resize: vertical;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder { color: #c4a98a; }
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--caramel);
+    box-shadow: 0 0 0 3px rgba(196,121,58,0.12);
+  }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+  /* Order type selector */
+  .order-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .order-chip {
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
+    color: var(--muted);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .order-chip:hover { border-color: var(--caramel); color: var(--brown); }
+  .order-chip.selected { background: var(--caramel); border-color: var(--caramel); color: #fff; font-weight: 500; }
+
+  /* Submit button */
+  .submit-btn {
+    background: var(--brown);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.9rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .submit-btn:hover:not(:disabled) { background: var(--caramel); transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+  /* Spinner */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  .submit-btn.loading .spinner { display: block; }
+  .submit-btn.loading .btn-text { opacity: 0.7; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Status message */
+  .form-status {
+    display: none;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.5;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .form-status.visible { display: flex; }
+  .form-status.success {
+    background: #edf7f1;
+    border: 1.5px solid #a3d4b3;
+    color: var(--success);
+  }
+  .form-status.error {
+    background: #fdf0ef;
+    border: 1.5px solid #e8a9a5;
+    color: var(--error);
+  }
+  .status-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
 </head>
 <body>
-  <nav id="navbar">
-    <img id="logoNav" src="front/media/logo.png" alt="Drea’s Place logo" />
-    <!-- <a href="index.html">Home</a> -->
-    <a href="mainscroll.html">Menu</a>
-    <a href="byo.html">Build-Your-Own</a>
-    <a href="owner.html">Meet the Owner</a>
-    <a href="contact.html">Contact</a>
-  </nav>
 
-  <main style="width: min(900px, 92%); margin: 1.5rem auto;">
-    <header class="mb-2">
-      <h1>We’d love to hear from you!</h1>
-    </header>
+<nav id="navbar">
+  <img id="logoNav" src="front/media/logo.png" alt="Drea's Place logo" />
+  <a href="mainscroll.html">Menu</a>
+  <a href="byo.html">Build-Your-Own</a>
+  <a href="owner.html">Meet the Owner</a>
+  <a href="contact.html" class="active">Contact</a>
+</nav>
 
-    <figure class="mb-2">
-      <img src="media/drea" alt="Drea decorating a carrot cake with floral designs." />
-    </figure>
+<div class="page-wrap">
 
-    <section class="mb-3">
-      <h3>Instagram</h3>
-      <p>
-        <a href="https://www.instagram.com/official.dreas_place/" target="_blank" rel="noopener">@official.dreas_place</a>
-      </p>
-    </section>
+  <header class="page-header">
+    <p class="eyebrow">Get in Touch</p>
+    <h1>We'd love to hear from you!</h1>
+    <p>Orders, questions, custom requests — we're here for all of it.</p>
+    <div class="divider"><span class="divider-icon">✦</span></div>
+  </header>
 
-    <section>
-      <h2>Send a message</h2>
-      <form id="contact-form" class="mt-1" action="#" method="post" aria-label="Contact form" novalidate>
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" placeholder="Your name" required />
+  <div class="contact-grid">
 
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="you@example.com" required />
+    <!-- LEFT: Photo + Info -->
+    <div class="contact-info">
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" placeholder="How can we help?" required></textarea>
+      <!-- Bell jar photo -->
+      <div class="jar-wrap">
+        <svg class="clip-def" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="bellJar" clipPathUnits="objectBoundingBox">
+              <path d="
+                M 0.50, 0.015
+                C 0.84, 0.015  0.965, 0.19  0.965, 0.39
+                L 0.965, 0.795
+                C 0.965, 0.845  0.925, 0.875  0.875, 0.875
+                L 0.915, 0.875
+                L 0.915, 0.915
+                L 0.085, 0.915
+                L 0.085, 0.875
+                L 0.125, 0.875
+                C 0.075, 0.875  0.035, 0.845  0.035, 0.795
+                L 0.035, 0.39
+                C 0.035, 0.19  0.16, 0.015  0.50, 0.015
+                Z
+              "/>
+            </clipPath>
+          </defs>
+        </svg>
+        <img
+          class="jar-photo"
+          src="front/media/IMG_20260304_105613.png"
+          alt="Drea decorating a carrot cake with floral designs."
+          style="clip-path: url(#bellJar);"
+        />
+        <div class="jar-glare"></div>
+        <div class="jar-base"></div>
+      </div>
 
-        <div class="mt-2">
-          <button type="submit">Send</button>
+      <!-- Contact info card -->
+      <div class="info-card">
+        <div>
+          <h3>Reach Out</h3>
         </div>
-        <p id="form-status" role="status" aria-live="polite" class="mt-1"></p>
-      </form>
-    </section>
-  </main>
-  <script>
-    const form = document.getElementById('contact-form')
-    const statusEl = document.getElementById('form-status')
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
-      statusEl.textContent = 'Sending...'
+        <div class="info-row">
+          <div class="info-icon">📸</div>
+          <div class="info-text">
+            Follow &amp; DM us on Instagram<br>
+            <a href="https://www.instagram.com/official.dreas_place/" target="_blank" rel="noopener">
+              @official.dreas_place
+            </a>
+          </div>
+        </div>
 
-      const formData = new FormData(form)
-      const payload = Object.fromEntries(formData.entries())
+        <div class="info-divider"></div>
 
-      try {
-        const res = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
+        <div class="info-row">
+          <div class="info-icon">📦</div>
+          <div class="info-text">
+            Orders are typically fulfilled within<br>
+            <strong style="color:var(--brown);">3–5 business days</strong>
+          </div>
+        </div>
 
-        const data = await res.json().catch(() => ({}))
-        if (!res.ok || !data.ok) throw new Error(data.error || 'Request failed')
+        <div class="info-divider"></div>
 
-        statusEl.textContent = 'Message sent! We will get back to you soon.'
-        form.reset()
-      } catch (err) {
-        statusEl.textContent = 'Failed to send message. Please try again later.'
+        <div class="info-row">
+          <div class="info-icon">🧁</div>
+          <div class="info-text">
+            Custom orders &amp; large quantities?<br>
+            Reach out early — we love a challenge!
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /contact-info -->
+
+    <!-- RIGHT: Form -->
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Send a Message</h2>
+        <p>Fill out the form and we'll get back to you as soon as possible.</p>
+      </div>
+      <div class="form-body">
+
+        <div class="field-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Your name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>What's this about? <span style="color:var(--muted);font-weight:300;text-transform:none;">(optional)</span></label>
+          <div class="order-chips" id="topicChips">
+            <div class="order-chip" data-val="General Question">General Question</div>
+            <div class="order-chip" data-val="Place an Order">Place an Order</div>
+            <div class="order-chip" data-val="Custom Order">Custom Order</div>
+            <div class="order-chip" data-val="Build-Your-Own Box">BYO Box</div>
+            <div class="order-chip" data-val="Large / Event Order">Event Order</div>
+            <div class="order-chip" data-val="Other">Other</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Tell us what you're looking for — flavor requests, quantities, date needed, anything!" required></textarea>
+        </div>
+
+        <div class="form-status" id="formStatus" role="status" aria-live="polite">
+          <span class="status-icon" id="statusIcon"></span>
+          <span id="statusText"></span>
+        </div>
+
+        <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()">
+          <div class="spinner"></div>
+          <span class="btn-text">Send Message →</span>
+        </button>
+
+      </div>
+    </div><!-- /form-card -->
+
+  </div><!-- /contact-grid -->
+</div><!-- /page-wrap -->
+
+<script>
+  // Topic chip toggle
+  let selectedTopic = '';
+  document.querySelectorAll('.order-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.order-chip').forEach(c => c.classList.remove('selected'));
+      if (selectedTopic === chip.dataset.val) {
+        selectedTopic = '';
+      } else {
+        chip.classList.add('selected');
+        selectedTopic = chip.dataset.val;
       }
-    })
-  </script>
+    });
+  });
+
+  // Form submission
+  async function submitForm() {
+    const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const btn     = document.getElementById('submitBtn');
+    const status  = document.getElementById('formStatus');
+    const icon    = document.getElementById('statusIcon');
+    const text    = document.getElementById('statusText');
+
+    // Clear previous status
+    status.className = 'form-status';
+    status.classList.remove('visible');
+
+    // Basic client-side validation
+    if (!name || !email || !message) {
+      showStatus('error', '⚠️', 'Please fill in your name, email, and message before sending.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showStatus('error', '⚠️', 'Please enter a valid email address.');
+      return;
+    }
+
+    // Build message with topic prefix
+    const fullMessage = selectedTopic
+      ? `Topic: ${selectedTopic}\n\n${message}`
+      : message;
+
+    btn.disabled = true;
+    btn.classList.add('loading');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message: fullMessage }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.ok) throw new Error(data.error || 'Request failed');
+
+      showStatus('success', '✅', `Thanks, ${name}! Your message has been sent. We'll get back to you soon.`);
+      // Reset form
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('message').value = '';
+      selectedTopic = '';
+      document.querySelectorAll('.order-chip').forEach(c => c.classList.remove('selected'));
+
+    } catch (err) {
+      showStatus('error', '❌', 'Something went wrong sending your message. Please try again or reach out on Instagram.');
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+    }
+  }
+
+  function showStatus(type, iconChar, msg) {
+    const status = document.getElementById('formStatus');
+    document.getElementById('statusIcon').textContent = iconChar;
+    document.getElementById('statusText').textContent = msg;
+    status.className = `form-status ${type} visible`;
+    status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // Allow Enter key to submit (but not in textarea)
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') {
+      submitForm();
+    }
+  });
+</script>
 </body>
 </html>
